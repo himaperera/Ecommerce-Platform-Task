@@ -5,7 +5,7 @@ import 'screens/splash_screen.dart';
 
 void main() {
   runApp(
-    // for whole app usenig provider
+    // for whole app usenig
     ChangeNotifierProvider(
       create: (context) => CartProvider(),
       child: const EarthRhythmApp(),

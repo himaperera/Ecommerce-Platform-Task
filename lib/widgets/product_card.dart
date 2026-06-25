@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/product_model.dart';
-// import '../screens/product_details_screen.dart';
+import '../screens/product_details_screen.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
@@ -12,14 +12,13 @@ class ProductCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         // පසුව අපි මෙතනින් Product Details පිටුවට යන code එක දානවා
-        /*
+
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => ProductDetailsScreen(product: product),
           ),
         );
-        */
       },
       child: Container(
         decoration: BoxDecoration(
@@ -47,7 +46,7 @@ class ProductCard extends StatelessWidget {
                   product.imageUrl,
                   width: double.infinity,
                   fit: BoxFit.cover,
-                  // ඉන්ටර්නෙට් නැති වෙලාවට පෙන්වන්න Loading එකක්
+                  // when the internet connection is lost then loading page
                   loadingBuilder: (context, child, loadingProgress) {
                     if (loadingProgress == null) return child;
                     return const Center(child: CircularProgressIndicator());
@@ -55,7 +54,7 @@ class ProductCard extends StatelessWidget {
                 ),
               ),
             ),
-            // Product Details ටික
+            // Product Details
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: Column(
