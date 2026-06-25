@@ -4,7 +4,7 @@ import '../data/mock_data.dart';
 import '../providers/cart_provider.dart';
 import '../widgets/product_card.dart';
 // මීළඟට අපි හදන Cart Screen සහ Profile Screen ගොනු
-// import 'cart_screen.dart';
+import 'cart_screen.dart';
 // import 'profile_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -45,7 +45,13 @@ class HomeScreen extends StatelessWidget {
                       color: Color(0xFF2E5C41),
                     ),
                     onPressed: () {
-                      // Cart Screen
+                      // Cart Screen එකට යන Code එක
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const CartScreen(),
+                        ),
+                      );
                     },
                   ),
                   if (cart.itemCount > 0)
