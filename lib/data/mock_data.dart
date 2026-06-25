@@ -3,46 +3,132 @@ import '../models/product_model.dart';
 final List<Product> earthRhythmProducts = [
   Product(
     id: 'p1',
-    name: 'Phyto-Ceramide Deep Moisturizer',
+    name: 'Rose PDRN Barrier Repair Capsule Cream',
     description:
-        'A deeply hydrating moisturizer with Phyto-Ceramides and Hyaluronic Acid that locks in moisture and strengthens the skin barrier.',
-    price: 3500.00,
+        'A cushiony capsule cream inspired by clean skincare rituals. It helps comfort dry skin, supports the barrier, and leaves a fresh non-greasy glow.',
+    price: 679.00,
+    originalPrice: 799.00,
     imageUrl:
         'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60',
     rating: 4.8,
-    category: 'Face Care',
+    reviews: 128,
+    category: 'Face',
+    badge: 'New Launch',
+    highlights: ['Barrier repair', 'Deep hydration', 'Non-greasy finish'],
   ),
   Product(
     id: 'p2',
-    name: 'Matcha Green Tea Face Wash',
+    name: 'Matcha Mochi Brightening Cleanser',
     description:
-        'Gentle exfoliating face wash with Matcha Green Tea and Aloe Vera. Perfect for daily cleansing and removing impurities.',
-    price: 1800.00,
+        'A gentle daily cleanser with matcha-inspired freshness. It removes impurities without stripping the skin and keeps the face soft after every wash.',
+    price: 509.00,
+    originalPrice: 599.00,
     imageUrl:
         'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60',
     rating: 4.5,
-    category: 'Cleanser',
+    reviews: 84,
+    category: 'Face',
+    badge: '15% off',
+    highlights: ['Daily cleanse', 'Soft finish', 'Brightening care'],
   ),
   Product(
     id: 'p3',
     name: 'Vitamin C Glow Serum',
     description:
-        'Brightening serum enriched with Vitamin C and Niacinamide to reduce dark spots and give a radiant glow.',
-    price: 4200.00,
+        'A lightweight glow serum enriched with vitamin C and niacinamide to support uneven tone, dullness, and everyday radiance.',
+    price: 629.00,
+    originalPrice: 849.00,
     imageUrl:
         'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60',
     rating: 4.7,
+    reviews: 212,
     category: 'Serum',
+    badge: 'Best Seller',
+    highlights: ['Glow support', 'Uneven tone', 'Lightweight texture'],
   ),
   Product(
     id: 'p4',
-    name: 'Daily Defence Sunscreen SPF 50',
+    name: 'Rosy Ritual Glow Sunscreen SPF 50',
     description:
-        'Lightweight, non-greasy sunscreen that provides broad-spectrum protection against UVA and UVB rays.',
-    price: 2800.00,
+        'A modern SPF 50 sunscreen with a soft rosy glow. Designed for daily protection with a comfortable, blendable finish.',
+    price: 469.00,
+    originalPrice: 599.00,
     imageUrl:
         'https://images.unsplash.com/photo-1556228720-192a6af4e86e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60',
     rating: 4.6,
-    category: 'Sun Care',
+    reviews: 196,
+    category: 'Sun',
+    badge: '22% off',
+    highlights: ['SPF 50', 'Rosy glow', 'Daily defense'],
   ),
+  Product(
+    id: 'p5',
+    name: 'Daily Dew Cooling Sunspray SPF 60',
+    description:
+        'A refreshing sunscreen spray made for quick re-application. It gives cooling sun care support during busy outdoor days.',
+    price: 439.00,
+    originalPrice: 549.00,
+    imageUrl:
+        'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60',
+    rating: 4.9,
+    reviews: 211,
+    category: 'Sun',
+    badge: 'Best Seller',
+    highlights: ['SPF 60', 'Cooling feel', 'Easy re-apply'],
+  ),
+  Product(
+    id: 'p6',
+    name: 'Hair Growth Serum with Redensyl',
+    description:
+        'A targeted hair serum for stronger-looking, fuller-feeling hair. Built for a simple night routine with a lightweight scalp finish.',
+    price: 629.00,
+    originalPrice: 849.00,
+    imageUrl:
+        'https://images.unsplash.com/photo-1597354984706-fac992d9306f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60',
+    rating: 4.4,
+    reviews: 48,
+    category: 'Hair',
+    badge: '25% off',
+    highlights: ['Scalp care', 'Lightweight', 'Fuller look'],
+  ),
+  Product(
+    id: 'p7',
+    name: 'Honey Lip Balm SPF 50',
+    description:
+        'A nourishing lip balm with sun protection support. It helps dry lips feel comfortable while adding a smooth healthy sheen.',
+    price: 299.00,
+    originalPrice: 375.00,
+    imageUrl:
+        'https://images.unsplash.com/photo-1596462502278-27bfdc403348?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60',
+    rating: 4.7,
+    reviews: 79,
+    category: 'Make Up',
+    badge: '20% off',
+    highlights: ['SPF 50', 'Lip care', 'Soft shine'],
+  ),
+  Product(
+    id: 'p8',
+    name: 'Body Lotion with Cocoa Butter',
+    description:
+        'A creamy body lotion for dry and rough skin. It absorbs comfortably and keeps skin feeling soft after shower routines.',
+    price: 549.00,
+    originalPrice: 699.00,
+    imageUrl:
+        'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60',
+    rating: 4.3,
+    reviews: 103,
+    category: 'Body',
+    badge: 'Body Care',
+    highlights: ['Dry skin', 'Creamy texture', 'Soft comfort'],
+  ),
+];
+
+final List<String> productCategories = [
+  'All',
+  'Face',
+  'Serum',
+  'Sun',
+  'Hair',
+  'Make Up',
+  'Body',
 ];
