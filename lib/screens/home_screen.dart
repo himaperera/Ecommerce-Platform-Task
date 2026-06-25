@@ -5,7 +5,7 @@ import '../providers/cart_provider.dart';
 import '../widgets/product_card.dart';
 // මීළඟට අපි හදන Cart Screen සහ Profile Screen ගොනු
 import 'cart_screen.dart';
-// import 'profile_screen.dart';
+import 'profile_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -31,6 +31,10 @@ class HomeScreen extends StatelessWidget {
             icon: const Icon(Icons.person_outline, color: Color(0xFF2E5C41)),
             onPressed: () {
               // after go to profile screen
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ProfileScreen()),
+              );
             },
           ),
           // Cart Icon  Badge
