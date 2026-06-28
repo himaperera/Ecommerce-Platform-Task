@@ -8,6 +8,13 @@ A modern, high-fidelity Flutter e-commerce mobile application featuring organic 
 *   **Interactive Checkout Journey**: Experience a complete checkout flow using Cash on Delivery (COD) that transitions into a dynamic confirmation screen thanking the customer with detailed transaction receipts.
 *   **Theme Management**: `ThemeProvider` supporting custom forest-green visual palettes
 *   **Data Models**: Clean representation of `Product`, `CartItem`, and `MockOrder`
+*   Interactive Checkout Journey: Experience a complete checkout flow using Cash on Delivery (COD) that transitions into a dynamic confirmation screen thanking        the customer with detailed transaction receipts.
+*  Live Order Tracking Stepper: Once an order is placed, track it in real-time on your Profile. Features an interactive 5-stage progress indicator (Ordered ➔          Packed ➔ Shipped ➔ On the Way ➔ Delivered) along with shipping status descriptions.
+*  Progress Simulator: A developer/user simulation button built directly into the tracking panel allowing you to progress mock orders through shipping stages.
+  Add-to-Cart Animations: High-fidelity checkmark overlays that automatically scale and dismiss upon adding products to your bag from the Home, All Products, or     Product Details screens.
+*  State-driven Bag (Cart) Manager: Seamlessly add, decrease, or remove items in real-time, compute sub-totals, calculate shipping rates, and apply coupon codes      (e.g. EARTH20 for 20% off).
+*  Dynamic Wishlist & Dark Mode: Save favorite skincare items to a custom carousel and toggle between premium Light and Dark themes dynamically.
+
 ## 📁 Directory Structure
 ---
 ```text
