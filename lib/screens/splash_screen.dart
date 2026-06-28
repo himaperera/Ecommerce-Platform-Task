@@ -33,9 +33,11 @@ class _SplashScreenState extends State<SplashScreen>
       if (mounted) {
         Navigator.of(context).pushReplacement(
           PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) => const LoginScreen(),
-            transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-                FadeTransition(opacity: animation, child: child),
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                const LoginScreen(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) =>
+                    FadeTransition(opacity: animation, child: child),
             transitionDuration: const Duration(milliseconds: 600),
           ),
         );
@@ -52,9 +54,16 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF174A33),
       body: Stack(
         children: [
+          // Background Image
+          Positioned.fill(
+            child: Image.asset(
+              'assets/images/splash_bg.png',
+              fit: BoxFit.cover,
+            ),
+          ),
+
           // Decorative circles
           Positioned(
             top: -80,
@@ -80,6 +89,7 @@ class _SplashScreenState extends State<SplashScreen>
               ),
             ),
           ),
+
           Center(
             child: FadeTransition(
               opacity: _fadeAnim,
@@ -94,48 +104,56 @@ class _SplashScreenState extends State<SplashScreen>
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Leaf icon
-                    Container(
-                      width: 72,
-                      height: 72,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.12),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: const Icon(
-                        Icons.eco_rounded,
-                        size: 38,
+                    // --- ALUTH TEXT LOGO EKA ---
+                    Text(
+                      'earth\nrhythm',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 64, // Lokuwata penna size eka wadi kara
+                        height: 0.85, // Peli deka lan kara (original eke wage)
+                        fontWeight: FontWeight.w800, // Godak bold kara
                         color: Colors.white,
+                        letterSpacing: -1.5,
+                        shadows: [
+                          Shadow(
+                            color: Colors.black.withValues(
+                              alpha: 0.5,
+                            ), // Background ekata kapila penna dark shadow ekak damma
+                            blurRadius: 12,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
                       ),
                     ),
-                    const SizedBox(height: 24),
-                    const Text(
-                      'Earth Rhythm',
+                    const SizedBox(height: 16),
+                    Text(
+                      'CLEAN. KIND. EFFECTIVE.',
                       style: TextStyle(
-                        fontSize: 36,
+                        fontSize: 14,
                         fontWeight: FontWeight.w700,
                         color: Colors.white,
-                        letterSpacing: 1.0,
+                        letterSpacing: 4.0, // Akuru athara idak damma
+                        shadows: [
+                          Shadow(
+                            color: Colors.black.withValues(alpha: 0.5),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'CLEAN · KIND · EFFECTIVE',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white.withValues(alpha: 0.65),
-                        letterSpacing: 3.5,
-                      ),
-                    ),
-                    const SizedBox(height: 60),
+
+                    // ----------------------------
+                    const SizedBox(height: 70),
+
+                    // Loading indicator eka
                     SizedBox(
                       width: 36,
                       height: 36,
                       child: CircularProgressIndicator(
                         strokeWidth: 2,
                         valueColor: AlwaysStoppedAnimation<Color>(
-                          Colors.white.withValues(alpha: 0.5),
+                          Colors.white.withValues(alpha: 0.8),
                         ),
                       ),
                     ),
