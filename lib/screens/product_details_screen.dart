@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../models/product_model.dart';
 import '../providers/cart_provider.dart';
 import '../providers/wishlist_provider.dart';
+import '../widgets/add_to_cart_animation.dart';
 import 'cart_screen.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
@@ -30,7 +31,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
-    _tabFadeAnim = CurvedAnimation(parent: _tabAnimController, curve: Curves.easeIn);
+    _tabFadeAnim = CurvedAnimation(
+      parent: _tabAnimController,
+      curve: Curves.easeIn,
+    );
     _tabAnimController.forward();
   }
 
@@ -65,7 +69,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
               const SizedBox(height: 8),
               Text(
                 product.description,
-                style: const TextStyle(fontSize: 14, height: 1.5, color: Colors.grey),
+                style: const TextStyle(
+                  fontSize: 14,
+                  height: 1.5,
+                  color: Colors.grey,
+                ),
               ),
               const SizedBox(height: 16),
               const Text(
@@ -79,11 +87,20 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                 children: product.highlights
                     .map(
                       (highlight) => Chip(
-                        avatar: const Icon(Icons.check_circle_outline, size: 16, color: Color(0xFF174A33)),
-                        label: Text(highlight, style: const TextStyle(fontSize: 12)),
+                        avatar: const Icon(
+                          Icons.check_circle_outline,
+                          size: 16,
+                          color: Color(0xFF174A33),
+                        ),
+                        label: Text(
+                          highlight,
+                          style: const TextStyle(fontSize: 12),
+                        ),
                         backgroundColor: Colors.transparent,
                         side: const BorderSide(color: Color(0xFFEBE6DD)),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
                       ),
                     )
                     .toList(),
@@ -104,12 +121,28 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
               const SizedBox(height: 8),
               const Text(
                 'Naturally sourced bio-active ingredients tailored to support optimal dermal nutrition without harsh chemicals.',
-                style: TextStyle(fontSize: 13, color: Colors.grey, height: 1.4),
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Colors.grey,
+                  height: 1.45,
+                ),
               ),
               const SizedBox(height: 14),
-              _IngredientRow(name: 'Natural Plant Extract', percentage: '45%', desc: 'Soothes dermal inflammation'),
-              _IngredientRow(name: 'Hyaluronic Acid Complex', percentage: '2.5%', desc: 'Deep cellular skin hydration'),
-              _IngredientRow(name: 'Bio-Vitamins & Minerals', percentage: '12%', desc: 'Replenishes lipid barrier protection'),
+              _IngredientRow(
+                name: 'Natural Plant Extract',
+                percentage: '45%',
+                desc: 'Soothes dermal inflammation',
+              ),
+              _IngredientRow(
+                name: 'Hyaluronic Acid Complex',
+                percentage: '2.5%',
+                desc: 'Deep cellular skin hydration',
+              ),
+              _IngredientRow(
+                name: 'Bio-Vitamins & Minerals',
+                percentage: '12%',
+                desc: 'Replenishes lipid barrier protection',
+              ),
             ],
           ),
         );
@@ -127,17 +160,20 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
               _PromiseItem(
                 icon: Icons.science_outlined,
                 title: 'Dermatologically Tested',
-                desc: 'Tested by independent dermatologists to ensure zero irritations or side effects.',
+                desc:
+                    'Tested by independent dermatologists to ensure zero irritations or side effects.',
               ),
               _PromiseItem(
                 icon: Icons.pets_outlined,
                 title: 'Cruelty Free & Vegan',
-                desc: 'We never test on animals and utilize 100% plant-based organic derivatives.',
+                desc:
+                    'We never test on animals and utilize 100% plant-based organic derivatives.',
               ),
               _PromiseItem(
                 icon: Icons.eco_outlined,
                 title: 'Ecological Safety',
-                desc: 'Biodegradable packaging materials helping lower carbon footprints.',
+                desc:
+                    'Biodegradable packaging materials helping lower carbon footprints.',
               ),
             ],
           ),
@@ -160,7 +196,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
             color: theme.scaffoldBackgroundColor,
             border: Border(
               top: BorderSide(
-                color: isDark ? const Color(0xFF24332B) : const Color(0xFFEFECE6),
+                color: isDark
+                    ? const Color(0xFF24332B)
+                    : const Color(0xFFEFECE6),
                 width: 1.2,
               ),
             ),
@@ -171,7 +209,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
               Container(
                 decoration: BoxDecoration(
                   border: Border.all(
-                    color: isDark ? const Color(0xFF24332B) : const Color(0xFFEFECE6),
+                    color: isDark
+                        ? const Color(0xFF24332B)
+                        : const Color(0xFFEFECE6),
                     width: 1.5,
                   ),
                   borderRadius: BorderRadius.circular(12),
@@ -190,7 +230,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                     ),
                     Text(
                       '$_quantity',
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
                     ),
                     IconButton(
                       icon: const Icon(Icons.add, size: 18),
@@ -204,7 +247,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                 ),
               ),
               const SizedBox(width: 12),
-              
+
               // Add to Cart Button
               Expanded(
                 child: ElevatedButton.icon(
@@ -221,27 +264,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                     for (int i = 0; i < _quantity; i++) {
                       cartProvider.addItem(widget.product);
                     }
-                    
-                    ScaffoldMessenger.of(context).clearSnackBars();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Added $_quantity item(s) of ${widget.product.name} to bag'),
-                        duration: const Duration(milliseconds: 1500),
-                        behavior: SnackBarBehavior.floating,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        action: SnackBarAction(
-                          label: 'View Bag',
-                          textColor: const Color(0xFFE49E87),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (_) => const CartScreen()),
-                            );
-                          },
-                        ),
-                      ),
+
+                    // Show the premium checkmark animation dialog
+                    showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (context) =>
+                          AddToCartAnimation(productName: widget.product.name),
                     );
                   },
                 ),
@@ -277,9 +306,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(
-                            isFavorite 
-                                ? 'Removed from wishlist' 
-                                : 'Added to wishlist!'
+                            isFavorite
+                                ? 'Removed from wishlist'
+                                : 'Added to wishlist!',
                           ),
                           duration: const Duration(milliseconds: 1000),
                           behavior: SnackBarBehavior.floating,
@@ -292,7 +321,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                   );
                 },
               ),
-              
+
               // Direct Cart navigation badge
               Consumer<CartProvider>(
                 builder: (context, cart, _) {
@@ -325,8 +354,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) {
                         return Container(
-                          color: isDark ? const Color(0xFF1D2622) : const Color(0xFFFAF8F3),
-                          child: const Icon(Icons.image_not_supported_outlined, size: 48),
+                          color: isDark
+                              ? const Color(0xFF1D2622)
+                              : const Color(0xFFFAF8F3),
+                          child: const Icon(
+                            Icons.image_not_supported_outlined,
+                            size: 48,
+                          ),
                         );
                       },
                     ),
@@ -352,7 +386,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 5,
+                          ),
                           decoration: BoxDecoration(
                             color: const Color(0xFFD67A60),
                             borderRadius: BorderRadius.circular(6),
@@ -383,7 +420,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
               ),
             ),
           ),
-          
+
           // Core Product Info details
           SliverToBoxAdapter(
             child: Padding(
@@ -394,7 +431,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                   // Ratings and category row
                   Row(
                     children: [
-                      const Icon(Icons.star_rounded, color: Color(0xFFF3AA2D), size: 20),
+                      const Icon(
+                        Icons.star_rounded,
+                        color: Color(0xFFF3AA2D),
+                        size: 20,
+                      ),
                       const SizedBox(width: 4),
                       Text(
                         '${widget.product.rating}',
@@ -405,15 +446,26 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                       const SizedBox(width: 6),
                       Text(
                         '(${widget.product.reviews} reviews)',
-                        style: const TextStyle(fontSize: 13, color: Colors.grey),
+                        style: const TextStyle(
+                          fontSize: 13,
+                          color: Colors.grey,
+                        ),
                       ),
                       const Spacer(),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 4,
+                        ),
                         decoration: BoxDecoration(
-                          color: isDark ? const Color(0xFF16201B) : const Color(0xFFF0F7F3),
+                          color: isDark
+                              ? const Color(0xFF16201B)
+                              : const Color(0xFFF0F7F3),
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: const Color(0xFF174A33), width: 0.8),
+                          border: Border.all(
+                            color: const Color(0xFF174A33),
+                            width: 0.8,
+                          ),
                         ),
                         child: Text(
                           widget.product.category,
@@ -427,7 +479,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                     ],
                   ),
                   const SizedBox(height: 18),
-                  
+
                   // Price breakdown
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
@@ -436,7 +488,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                         'LKR ${widget.product.price.toStringAsFixed(0)}',
                         style: theme.textTheme.headlineSmall?.copyWith(
                           fontWeight: FontWeight.w900,
-                          color: isDark ? Colors.white : const Color(0xFF1C2B22),
+                          color: isDark
+                              ? Colors.white
+                              : const Color(0xFF1C2B22),
                         ),
                       ),
                       const SizedBox(width: 12),
@@ -462,12 +516,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                     padding: EdgeInsets.symmetric(vertical: 20),
                     child: Divider(),
                   ),
-                  
+
                   // Interactive Content Tabs Selector (Clean UI custom tab buttons)
                   Container(
                     height: 38,
                     decoration: BoxDecoration(
-                      color: isDark ? const Color(0xFF16201B) : const Color(0xFFF5F2EC),
+                      color: isDark
+                          ? const Color(0xFF16201B)
+                          : const Color(0xFFF5F2EC),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Row(
@@ -497,21 +553,23 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                     ),
                   ),
                   const SizedBox(height: 20),
-                  
+
                   // Displaying the active tab body
                   _buildTabContent(widget.product),
-                  
+
                   const SizedBox(height: 24),
                   // General info cards
                   _InfoCardTile(
                     icon: Icons.local_shipping_outlined,
                     title: 'Free Island-wide Delivery',
-                    desc: 'On orders over LKR 3,500. Expected delivery within 2-4 business days.',
+                    desc:
+                        'On orders over LKR 3,500. Expected delivery within 2-4 business days.',
                   ),
                   _InfoCardTile(
                     icon: Icons.workspace_premium_outlined,
                     title: '100% Quality Assurance',
-                    desc: 'Made with organic ingredients certified safe under global skincare guidelines.',
+                    desc:
+                        'Made with organic ingredients certified safe under global skincare guidelines.',
                   ),
                   const SizedBox(height: 40),
                 ],
@@ -567,7 +625,11 @@ class _IngredientRow extends StatelessWidget {
   final String percentage;
   final String desc;
 
-  const _IngredientRow({required this.name, required this.percentage, required this.desc});
+  const _IngredientRow({
+    required this.name,
+    required this.percentage,
+    required this.desc,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -588,15 +650,28 @@ class _IngredientRow extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                Text(
+                  name,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 13,
+                  ),
+                ),
                 const SizedBox(height: 2),
-                Text(desc, style: const TextStyle(color: Colors.grey, fontSize: 11)),
+                Text(
+                  desc,
+                  style: const TextStyle(color: Colors.grey, fontSize: 11),
+                ),
               ],
             ),
           ),
           Text(
             percentage,
-            style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFFD67A60), fontSize: 14),
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Color(0xFFD67A60),
+              fontSize: 14,
+            ),
           ),
         ],
       ),
@@ -610,7 +685,11 @@ class _PromiseItem extends StatelessWidget {
   final String title;
   final String desc;
 
-  const _PromiseItem({required this.icon, required this.title, required this.desc});
+  const _PromiseItem({
+    required this.icon,
+    required this.title,
+    required this.desc,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -621,8 +700,8 @@ class _PromiseItem extends StatelessWidget {
         children: [
           Container(
             padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: const Color(0xFFF0F7F3),
+            decoration: const BoxDecoration(
+              color: Color(0xFFF0F7F3),
               shape: BoxShape.circle,
             ),
             child: Icon(icon, color: const Color(0xFF174A33), size: 18),
@@ -632,9 +711,22 @@ class _PromiseItem extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13.5)),
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 13.5,
+                  ),
+                ),
                 const SizedBox(height: 2),
-                Text(desc, style: const TextStyle(color: Colors.grey, fontSize: 12, height: 1.35)),
+                Text(
+                  desc,
+                  style: const TextStyle(
+                    color: Colors.grey,
+                    fontSize: 12,
+                    height: 1.35,
+                  ),
+                ),
               ],
             ),
           ),
@@ -650,7 +742,11 @@ class _InfoCardTile extends StatelessWidget {
   final String title;
   final String desc;
 
-  const _InfoCardTile({required this.icon, required this.title, required this.desc});
+  const _InfoCardTile({
+    required this.icon,
+    required this.title,
+    required this.desc,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -679,12 +775,19 @@ class _InfoCardTile extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   desc,
-                  style: const TextStyle(color: Colors.grey, fontSize: 12, height: 1.35),
+                  style: const TextStyle(
+                    color: Colors.grey,
+                    fontSize: 12,
+                    height: 1.35,
+                  ),
                 ),
               ],
             ),

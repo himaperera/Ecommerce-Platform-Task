@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../models/product_model.dart';
 import '../providers/cart_provider.dart';
 import '../screens/product_details_screen.dart';
+import '../widgets/add_to_cart_animation.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
@@ -141,11 +142,35 @@ class ProductCard extends StatelessWidget {
                       label: const Text('Add'),
                       onPressed: () {
                         context.read<CartProvider>().addItem(product);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('${product.name} added to cart'),
-                            duration: const Duration(milliseconds: 1100),
-                          ),
+
+                        showGeneralDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          barrierLabel: '',
+                          barrierColor: Colors.black45,
+                          transitionDuration: const Duration(milliseconds: 300),
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) {
+                                Future.delayed(const Duration(seconds: 2), () {
+                                  if (Navigator.canPop(context)) {
+                                    Navigator.pop(context);
+                                  }
+                                });
+
+                                return AddToCartAnimation(
+                                  productName: product.name,
+                                );
+                              },
+                          transitionBuilder:
+                              (context, animation, secondaryAnimation, child) {
+                                return ScaleTransition(
+                                  scale: CurvedAnimation(
+                                    parent: animation,
+                                    curve: Curves.elasticOut,
+                                  ),
+                                  child: child,
+                                );
+                              },
                         );
                       },
                     ),

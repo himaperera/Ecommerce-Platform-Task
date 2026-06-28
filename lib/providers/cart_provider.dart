@@ -1,11 +1,36 @@
 import 'package:flutter/material.dart';
 import '../models/cart_item_model.dart';
 import '../models/product_model.dart';
+import '../models/order_model.dart';
 
 class CartProvider with ChangeNotifier {
   // Keep cart item map
   final Map<String, CartItem> _items = {};
-  
+
+  // Order tracking and history
+  final List<MockOrder> _orders = [
+    MockOrder(
+      orderId: 'ER-1024',
+      date: '24 Jun 2026',
+      status: 'Delivered',
+      amount: 1617.0,
+      items: [],
+      address: 'No. 24, Colombo, Sri Lanka',
+      trackingStep: 4,
+    ),
+    MockOrder(
+      orderId: 'ER-1019',
+      date: '20 Jun 2026',
+      status: 'Processing',
+      amount: 978.0,
+      items: [],
+      address: 'No. 24, Colombo, Sri Lanka',
+      trackingStep: 1,
+    ),
+  ];
+
+  MockOrder? _activeTrackingOrder;
+  int _currentTabIndex = 0;
   String _appliedCoupon = '';
   double _couponDiscountPercentage = 0.0;
 
@@ -109,6 +134,108 @@ class CartProvider with ChangeNotifier {
     _items.clear();
     _appliedCoupon = '';
     _couponDiscountPercentage = 0.0;
+    notifyListeners();
+  }
+
+  // Getters for orders and tab
+  List<MockOrder> get orders => [..._orders];
+  int get currentTabIndex => _currentTabIndex;
+
+  MockOrder? get activeTrackingOrder =>
+      _activeTrackingOrder ?? (_orders.isNotEmpty ? _orders.first : null);
+
+  void setTabIndex(int index) {
+    _currentTabIndex = index;
+    notifyListeners();
+  }
+
+  void setActiveTrackingOrder(MockOrder order) {
+    _activeTrackingOrder = order;
+    notifyListeners();
+  }
+
+  void simulateNextTrackingStep(String orderId) {
+    final index = _orders.indexWhere((o) => o.orderId == orderId);
+    if (index != -1) {
+      final order = _orders[index];
+      int nextStep = order.trackingStep + 1;
+      if (nextStep > 4) nextStep = 4; // Max is Delivered
+
+      String nextStatus;
+      switch (nextStep) {
+        case 0:
+          nextStatus = 'Ordered';
+          break;
+        case 1:
+          nextStatus = 'Processing';
+          break;
+        case 2:
+          nextStatus = 'Shipped';
+          break;
+        case 3:
+          nextStatus = 'Out for Delivery';
+          break;
+        case 4:
+        default:
+          nextStatus = 'Delivered';
+          break;
+      }
+
+      final updatedOrder = order.copyWith(
+        status: nextStatus,
+        trackingStep: nextStep,
+      );
+
+      _orders[index] = updatedOrder;
+
+      if (_activeTrackingOrder?.orderId == orderId) {
+        _activeTrackingOrder = updatedOrder;
+      }
+      notifyListeners();
+    }
+  }
+
+  void placeOrder(String address) {
+    final nextIdNum = _orders.isEmpty
+        ? 1000
+        : int.parse(_orders.first.orderId.replaceAll('ER-', '')) + 1;
+    final newOrderId = 'ER-$nextIdNum';
+
+    final now = DateTime.now();
+    final months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+    final dateStr = '${now.day} ${months[now.month - 1]} ${now.year}';
+
+    final newOrder = MockOrder(
+      orderId: newOrderId,
+      date: dateStr,
+      status: 'Processing',
+      amount: grandTotal,
+      items: _items.values.toList(),
+      address: address,
+      trackingStep: 1, // Start at Processing
+    );
+
+    _orders.insert(0, newOrder);
+    _activeTrackingOrder = newOrder;
+
+    // Clear cart and coupon properties
+    _items.clear();
+    _appliedCoupon = '';
+    _couponDiscountPercentage = 0.0;
+
     notifyListeners();
   }
 }

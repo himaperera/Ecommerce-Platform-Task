@@ -24,7 +24,7 @@ class EarthRhythmApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeProvider = context.watch<ThemeProvider>();
-    
+
     // Brand design color tokens
     const brandForestGreen = Color(0xFF174A33);
     const brandPeachCoral = Color(0xFFD67A60);
@@ -102,7 +102,9 @@ class EarthRhythmApp extends StatelessWidget {
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
           seedColor: brandForestGreen,
-          primary: const Color(0xFF3E8E64), // Slightly lighter green for readability on dark backgrounds
+          primary: const Color(
+            0xFF3E8E64,
+          ), // Slightly lighter green for readability on dark backgrounds
           secondary: brandPeachCoral,
           brightness: Brightness.dark,
           surface: const Color(0xFF16201B),

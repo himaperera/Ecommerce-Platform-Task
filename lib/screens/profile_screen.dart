@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import '../data/mock_data.dart';
 import '../providers/theme_provider.dart';
 import '../providers/wishlist_provider.dart';
+import '../providers/cart_provider.dart';
+import '../models/order_model.dart';
 import 'login_screen.dart';
 import 'product_details_screen.dart';
 
@@ -18,6 +20,7 @@ class ProfileScreen extends StatelessWidget {
     final isDark = theme.brightness == Brightness.dark;
     final themeProvider = context.watch<ThemeProvider>();
     final wishlistProvider = context.watch<WishlistProvider>();
+    final cartProvider = context.watch<CartProvider>();
 
     // Load actual saved items
     final wishlistItems = wishlistProvider.getWishlistItems(earthRhythmProducts);
@@ -195,6 +198,10 @@ class ProfileScreen extends StatelessWidget {
 
         const SizedBox(height: 24),
 
+        // Live Order Tracking panel
+        if (cartProvider.activeTrackingOrder != null)
+          _buildTrackingPanel(context, cartProvider.activeTrackingOrder!, cartProvider, isDark),
+
         // Recent Orders
         Text(
           'Recent Orders',
@@ -204,18 +211,28 @@ class ProfileScreen extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 10),
-        const _OrderTile(
-          orderId: 'ER-1024',
-          status: 'Delivered',
-          amount: 'LKR 1,617',
-          date: '24 Jun 2026',
-        ),
-        const _OrderTile(
-          orderId: 'ER-1019',
-          status: 'Processing',
-          amount: 'LKR 978',
-          date: '20 Jun 2026',
-        ),
+        if (cartProvider.orders.isEmpty)
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 24),
+            alignment: Alignment.center,
+            child: const Text('No orders placed yet.', style: TextStyle(color: Colors.grey, fontSize: 12)),
+          )
+        else
+          ...cartProvider.orders.map((order) {
+            final isTrackingActive = cartProvider.activeTrackingOrder?.orderId == order.orderId;
+            return GestureDetector(
+              onTap: () {
+                cartProvider.setActiveTrackingOrder(order);
+              },
+              child: _OrderTile(
+                orderId: order.orderId,
+                status: order.status,
+                amount: 'LKR ${order.amount.toStringAsFixed(0)}',
+                date: order.date,
+                isTracking: isTrackingActive,
+              ),
+            );
+          }),
 
         const SizedBox(height: 24),
 
@@ -249,6 +266,197 @@ class ProfileScreen extends StatelessWidget {
         title: const Text('Profile'),
       ),
       body: profileBody,
+    );
+  }
+
+  Widget _buildTrackingPanel(
+    BuildContext context,
+    MockOrder activeOrder,
+    CartProvider cartProvider,
+    bool isDark,
+  ) {
+    final steps = ['Ordered', 'Packed', 'Shipped', 'On the Way', 'Delivered'];
+    final stepIcons = [
+      Icons.shopping_cart_outlined,
+      Icons.inventory_2_outlined,
+      Icons.local_shipping_outlined,
+      Icons.moped_outlined,
+      Icons.library_add_check_outlined,
+    ];
+
+    final currentStep = activeOrder.trackingStep;
+
+    // Detail text description corresponding to active stage
+    final stepDescriptions = [
+      'Order has been received and is awaiting validation.',
+      'Skincare products are packed and prepared at our clean lab.',
+      'Package handed over to the express courier partner.',
+      'Out for delivery. Driver is near Colombo shipping location.',
+      'Delivered successfully! Thank you for being with Earth Rhythm.'
+    ];
+
+    return Container(
+      padding: const EdgeInsets.all(18),
+      margin: const EdgeInsets.only(bottom: 24),
+      decoration: BoxDecoration(
+        color: isDark ? const Color(0xFF16201B) : Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: isDark ? const Color(0xFF24332B) : const Color(0xFFEFECE6),
+          width: 1.2,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Active Order Tracking',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 11,
+                      color: isDark ? Colors.white60 : Colors.grey.shade600,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    activeOrder.orderId,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 16,
+                      color: Color(0xFF174A33),
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  color: activeOrder.status == 'Delivered'
+                      ? const Color(0xFFE8F5E9)
+                      : const Color(0xFFFFF3E0),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  activeOrder.status,
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                    color: activeOrder.status == 'Delivered'
+                        ? Colors.green.shade800
+                        : Colors.orange.shade800,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 18),
+
+          // Horizontal Stepper
+          Row(
+            children: List.generate(5, (index) {
+              final isCompleted = index <= currentStep;
+              final isActive = index == currentStep;
+
+              return Expanded(
+                child: Row(
+                  children: [
+                    // Step Point Dot & Label
+                    Expanded(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          CircleAvatar(
+                            radius: 14,
+                            backgroundColor: isCompleted
+                                ? const Color(0xFF174A33)
+                                : (isDark ? const Color(0xFF24332B) : Colors.grey.shade200),
+                            child: Icon(
+                              stepIcons[index],
+                              size: 13,
+                              color: isCompleted ? Colors.white : Colors.grey,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            steps[index],
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 8.5,
+                              fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
+                              color: isActive
+                                  ? const Color(0xFFD67A60)
+                                  : (isCompleted ? (isDark ? Colors.white70 : Colors.black87) : Colors.grey),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    // Connection Line
+                    if (index < 4)
+                      Container(
+                        width: 8,
+                        height: 2,
+                        margin: const EdgeInsets.only(bottom: 12),
+                        color: index < currentStep
+                            ? const Color(0xFF174A33)
+                            : (isDark ? const Color(0xFF24332B) : Colors.grey.shade300),
+                      ),
+                  ],
+                ),
+              );
+            }),
+          ),
+
+          const SizedBox(height: 16),
+          const Divider(height: 1),
+          const SizedBox(height: 12),
+
+          // Detail Note
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Icon(Icons.info_outline_rounded, size: 14, color: Color(0xFF174A33)),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  stepDescriptions[currentStep],
+                  style: const TextStyle(fontSize: 11, height: 1.3, color: Colors.grey),
+                ),
+              ),
+            ],
+          ),
+
+          // Interactivity Simulator Button (Active when not fully delivered)
+          if (currentStep < 4) ...[
+            const SizedBox(height: 12),
+            ElevatedButton.icon(
+              icon: const Icon(Icons.airport_shuttle_outlined, size: 14),
+              label: const Text('Simulate Shipping Progress'),
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size.fromHeight(36),
+                backgroundColor: const Color(0xFFD67A60),
+                foregroundColor: Colors.white,
+                elevation: 0,
+                padding: EdgeInsets.zero,
+                textStyle: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              onPressed: () {
+                cartProvider.simulateNextTrackingStep(activeOrder.orderId);
+              },
+            ),
+          ],
+        ],
+      ),
     );
   }
 
@@ -300,12 +508,14 @@ class _OrderTile extends StatelessWidget {
   final String status;
   final String amount;
   final String date;
+  final bool isTracking;
 
   const _OrderTile({
     required this.orderId,
     required this.status,
     required this.amount,
     required this.date,
+    this.isTracking = false,
   });
 
   @override
@@ -319,21 +529,51 @@ class _OrderTile extends StatelessWidget {
         color: theme.cardTheme.color,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: isDark ? const Color(0xFF24332B) : const Color(0xFFEFECE6),
-          width: 1.2,
+          color: isTracking
+              ? const Color(0xFFD67A60)
+              : (isDark ? const Color(0xFF24332B) : const Color(0xFFEFECE6)),
+          width: isTracking ? 1.8 : 1.2,
         ),
       ),
       child: ListTile(
-        leading: Icon(Icons.receipt_long_outlined, color: const Color(0xFF174A33)),
-        title: Text(orderId, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13.5)),
+        leading: Icon(
+          Icons.receipt_long_outlined,
+          color: isTracking ? const Color(0xFFD67A60) : const Color(0xFF174A33),
+        ),
+        title: Row(
+          children: [
+            Text(orderId, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13.5)),
+            if (isTracking) ...[
+              const SizedBox(width: 8),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFD67A60).withOpacity(0.15),
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: const Text(
+                  'Tracking',
+                  style: TextStyle(fontSize: 8.5, color: Color(0xFFD67A60), fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
+          ],
+        ),
         subtitle: Text('$date • $status', style: const TextStyle(fontSize: 11)),
-        trailing: Text(
-          amount,
-          style: TextStyle(
-            fontWeight: FontWeight.w900,
-            color: isDark ? Colors.white : const Color(0xFF1C2B22),
-            fontSize: 13.5,
-          ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              amount,
+              style: TextStyle(
+                fontWeight: FontWeight.w900,
+                color: isDark ? Colors.white : const Color(0xFF1C2B22),
+                fontSize: 13.5,
+              ),
+            ),
+            const SizedBox(width: 4),
+            const Icon(Icons.chevron_right_rounded, size: 16, color: Colors.grey),
+          ],
         ),
       ),
     );

@@ -8,8 +8,7 @@ final List<Product> earthRhythmProducts = [
         'A cushiony capsule cream inspired by clean skincare rituals. It helps comfort dry skin, supports the barrier, and leaves a fresh non-greasy glow.',
     price: 679.00,
     originalPrice: 799.00,
-    imageUrl:
-        'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60',
+    imageUrl: 'assets/images/pdrn.png',
     rating: 4.8,
     reviews: 128,
     category: 'Face',
@@ -23,8 +22,7 @@ final List<Product> earthRhythmProducts = [
         'A gentle daily cleanser with matcha-inspired freshness. It removes impurities without stripping the skin and keeps the face soft after every wash.',
     price: 509.00,
     originalPrice: 599.00,
-    imageUrl:
-        'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60',
+    imageUrl: 'assets/images/mochi.png',
     rating: 4.5,
     reviews: 84,
     category: 'Face',
@@ -38,8 +36,7 @@ final List<Product> earthRhythmProducts = [
         'A lightweight glow serum enriched with vitamin C and niacinamide to support uneven tone, dullness, and everyday radiance.',
     price: 629.00,
     originalPrice: 849.00,
-    imageUrl:
-        'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60',
+    imageUrl: 'assets/images/vitamin_c.png',
     rating: 4.7,
     reviews: 212,
     category: 'Serum',
@@ -53,8 +50,7 @@ final List<Product> earthRhythmProducts = [
         'A modern SPF 50 sunscreen with a soft rosy glow. Designed for daily protection with a comfortable, blendable finish.',
     price: 469.00,
     originalPrice: 599.00,
-    imageUrl:
-        'https://images.unsplash.com/photo-1556228720-192a6af4e86e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60',
+    imageUrl: 'assets/images/suscreen.png',
     rating: 4.6,
     reviews: 196,
     category: 'Sun',
@@ -68,8 +64,7 @@ final List<Product> earthRhythmProducts = [
         'A refreshing sunscreen spray made for quick re-application. It gives cooling sun care support during busy outdoor days.',
     price: 439.00,
     originalPrice: 549.00,
-    imageUrl:
-        'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60',
+    imageUrl: 'assets/images/spray.png',
     rating: 4.9,
     reviews: 211,
     category: 'Sun',
@@ -83,8 +78,7 @@ final List<Product> earthRhythmProducts = [
         'A targeted hair serum for stronger-looking, fuller-feeling hair. Built for a simple night routine with a lightweight scalp finish.',
     price: 629.00,
     originalPrice: 849.00,
-    imageUrl:
-        'https://images.unsplash.com/photo-1597354984706-fac992d9306f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60',
+    imageUrl: 'assets/images/hair.png',
     rating: 4.4,
     reviews: 48,
     category: 'Hair',
@@ -98,8 +92,7 @@ final List<Product> earthRhythmProducts = [
         'A nourishing lip balm with sun protection support. It helps dry lips feel comfortable while adding a smooth healthy sheen.',
     price: 299.00,
     originalPrice: 375.00,
-    imageUrl:
-        'https://images.unsplash.com/photo-1596462502278-27bfdc403348?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60',
+    imageUrl: 'assets/images/lip.png',
     rating: 4.7,
     reviews: 79,
     category: 'Make Up',
@@ -113,8 +106,7 @@ final List<Product> earthRhythmProducts = [
         'A creamy body lotion for dry and rough skin. It absorbs comfortably and keeps skin feeling soft after shower routines.',
     price: 549.00,
     originalPrice: 699.00,
-    imageUrl:
-        'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60',
+    imageUrl: 'assets/images/coco.png',
     rating: 4.3,
     reviews: 103,
     category: 'Body',

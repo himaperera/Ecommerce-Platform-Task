@@ -45,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen>
 
     // Video setup — replace the asset path with your actual video file
     // e.g. 'assets/videos/hero_skin.mp4'
-    _videoController = VideoPlayerController.asset('assets/videos/Lipstic.mp4')
+    _videoController = VideoPlayerController.asset('assets/videos/cover.mp4')
       ..initialize()
           .then((_) {
             if (mounted) {

@@ -63,9 +63,24 @@ flutter:
   # Meka yatin oyage images tika add karanna:
   assets:
     - assets/images/splash_bg.png
+    - assets/images/splash_sc.png
+    - assets/images/1.png
+    - assets/images/c.png
+    - assets/images/t.png
+    - assets/images/M.png
+    - assets/images/S.png
+    - assets/images/e.png
+    - assets/images/mochi.png
+    - assets/images/ceramide.png
+    - assets/images/suscreen.png
+    - assets/images/lip.png
+    - assets/images/pdrn.png
+    - assets/images/coco.png
+    - assets/images/vitamin_c.png
     - assets/videos/Lipstic.mp4
     - assets/videos/macha.mp4
     - assets/videos/cover.mp4
+
     #- assets/images/earth_rhythm_logo.png
 
   # An image asset can refer to one or more resolution-specific "variants", see

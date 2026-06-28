@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/cart_provider.dart';
+import '../models/order_model.dart';
 
 class CartScreen extends StatefulWidget {
   final bool isEmbedded;
@@ -41,36 +42,11 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   void _handleCheckout(CartProvider cart) {
-    // Show order success overlay animation
+    // Register order in mock tracking history & clear the cart
+    cart.placeOrder('No. 24, Colombo, Sri Lanka');
+
     setState(() {
       _isSuccessCheckout = true;
-    });
-
-    // Clear cart after short delay
-    Future.delayed(const Duration(milliseconds: 2500), () {
-      if (mounted) {
-        cart.clearCart();
-        setState(() {
-          _isSuccessCheckout = false;
-        });
-        
-        // Show confirmation snackbar
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('Order placed successfully! 🎉'),
-            backgroundColor: const Color(0xFF174A33),
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
-        );
-
-        // If not embedded, navigate back
-        if (!widget.isEmbedded) {
-          Navigator.pop(context);
-        }
-      }
     });
   }
 
@@ -84,7 +60,7 @@ class _CartScreenState extends State<CartScreen> {
     Widget mainContent;
 
     if (_isSuccessCheckout) {
-      mainContent = _buildSuccessAnim(isDark);
+      mainContent = _buildSuccessAnim(isDark, cart);
     } else if (cart.items.isEmpty) {
       mainContent = _buildEmptyState(context, isDark);
     } else {
@@ -476,54 +452,227 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 
-  Widget _buildSuccessAnim(bool isDark) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Checked mark icon circular shell with pop details
-            Container(
-              width: 96,
-              height: 96,
-              decoration: const BoxDecoration(
-                color: Color(0xFF174A33),
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                Icons.check_rounded,
-                size: 54,
-                color: Colors.white,
+  Widget _buildSuccessAnim(bool isDark, CartProvider cart) {
+    final MockOrder? lastOrder = cart.activeTrackingOrder;
+    if (lastOrder == null) {
+      return const Center(child: Text("No order details found."));
+    }
+
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const SizedBox(height: 10),
+          // Checkmark Icon with beautiful subtle shadow
+          Container(
+            width: 84,
+            height: 84,
+            decoration: BoxDecoration(
+              color: const Color(0xFF174A33),
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF174A33).withOpacity(0.3),
+                  blurRadius: 16,
+                  offset: const Offset(0, 8),
+                ),
+              ],
+            ),
+            child: const Icon(
+              Icons.check_rounded,
+              size: 48,
+              color: Colors.white,
+            ),
+          ),
+          const SizedBox(height: 20),
+          Text(
+            'Order Confirmed!',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.w900,
+              color: isDark ? Colors.white : const Color(0xFF174A33),
+            ),
+          ),
+          const SizedBox(height: 6),
+          const Text(
+            'Thanks for being with us!',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w700,
+              color: Color(0xFFD67A60),
+            ),
+          ),
+          const SizedBox(height: 8),
+          const Text(
+            'Your organic skincare goodies are on their way. We\'ve registered your order and sent a confirmation email.',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 12.5,
+              color: Colors.grey,
+              height: 1.45,
+            ),
+          ),
+          const SizedBox(height: 24),
+
+          // Order summary card
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: isDark ? const Color(0xFF1A2621) : Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: isDark ? const Color(0xFF24332B) : const Color(0xFFEFECE6),
+                width: 1.2,
               ),
             ),
-            const SizedBox(height: 24),
-            const Text(
-              'Order Placed Successfully!',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.w900,
-                color: Color(0xFF174A33),
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('Order Code:', style: TextStyle(fontSize: 13, color: Colors.grey, fontWeight: FontWeight.bold)),
+                    Text(lastOrder.orderId, style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: isDark ? Colors.white : const Color(0xFF1C2B22))),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('Date Placed:', style: TextStyle(fontSize: 13, color: Colors.grey)),
+                    Text(lastOrder.date, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500)),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('Payment Method:', style: TextStyle(fontSize: 13, color: Colors.grey)),
+                    const Text('Cash on Delivery (COD)', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500)),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('Delivery Address:', style: TextStyle(fontSize: 13, color: Colors.grey)),
+                    Expanded(
+                      child: Text(
+                        lastOrder.address,
+                        textAlign: TextAlign.end,
+                        style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 12),
+                  child: Divider(height: 1),
+                ),
+                // Items Summary
+                const Text(
+                  'Items Summary',
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 8),
+                ...lastOrder.items.map((item) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: Row(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(6),
+                          child: Image.network(
+                            item.product.imageUrl,
+                            width: 32,
+                            height: 32,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, __, ___) => const Icon(Icons.spa, size: 32),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            item.product.name,
+                            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        Text(
+                          '${item.quantity} x LKR ${item.product.price.toStringAsFixed(0)}',
+                          style: const TextStyle(fontSize: 12, color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                  );
+                }).toList(),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  child: Divider(height: 1),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('Total Paid:', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                    Text(
+                      'LKR ${lastOrder.amount.toStringAsFixed(0)}',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w900,
+                        color: isDark ? Colors.white : const Color(0xFF1C2B22),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
-            const SizedBox(height: 8),
-            const Text(
-              'Your organic skincare goodies are on their way. Thank you for choosing Earth Rhythm!',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 13, color: Colors.grey, height: 1.45),
+          ),
+          const SizedBox(height: 32),
+
+          // Interactive Action Buttons
+          ElevatedButton.icon(
+            icon: const Icon(Icons.location_on_outlined, size: 18),
+            label: const Text('Track Order Status'),
+            style: ElevatedButton.styleFrom(
+              minimumSize: const Size.fromHeight(48),
+              backgroundColor: const Color(0xFF174A33),
+              foregroundColor: Colors.white,
             ),
-            const SizedBox(height: 40),
-            const SizedBox(
-              width: 24,
-              height: 24,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFD67A60)),
-              ),
+            onPressed: () {
+              // Ensure this order is the one being tracked
+              cart.setActiveTrackingOrder(lastOrder);
+              // Switch bottom tab index to 2 (Profile tab)
+              cart.setTabIndex(2);
+              
+              // Reset the Checkout screen state so it shows empty bag next time
+              setState(() {
+                _isSuccessCheckout = false;
+              });
+            },
+          ),
+          const SizedBox(height: 12),
+          OutlinedButton(
+            style: OutlinedButton.styleFrom(
+              minimumSize: const Size.fromHeight(48),
+              side: const BorderSide(color: Color(0xFF174A33), width: 1.5),
             ),
-          ],
-        ),
+            onPressed: () {
+              setState(() {
+                _isSuccessCheckout = false;
+              });
+              // Return to Home Explore screen (tab index 0)
+              cart.setTabIndex(0);
+            },
+            child: const Text('Continue Shopping'),
+          ),
+        ],
       ),
     );
   }
